@@ -4,7 +4,7 @@
 
 Please note that the plots start from epoch 0, so when referring to 'epoch 14' on the plot, it actually corresponds to epoch 15 in the training process
 
-## Image plots of the regressed boxes after the postprocessing
+## AP and mAP Scores of the Test Set
 During the training process, we saved model checkpoints at epoch 15 and at the end of training, which is epoch 30. We obtained the following Average Precision (AP) values for the test set using these two models:
 
 **Epoch 15:**
