@@ -266,5 +266,5 @@ if __name__ == '__main__':
     box_head= BoxHead() 
     
     wandb_logger = WandbLogger(name='box_head', project="faster_rcnn", log_model=True)
-    trainer = pl.Trainer(max_epochs=40, devices=1, logger=wandb_logger)
+    trainer = pl.Trainer(max_epochs=30, devices=1, logger=wandb_logger)
     trainer.fit(box_head, datamodule=datamodule)
