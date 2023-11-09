@@ -1,4 +1,8 @@
-## Training and Validation curves of the total loss, the loss of the classifier and the loss of the regressor of the Box Head
+## Image plots of the proposals with the no-background classes and their ground truth boxes
+
+![Proposals](plots/proposals.png)
+
+## Training and Validation curves of the total loss, the loss of the classifier, and the loss of the regressor of the Box Head
 ![Training Plot](plots/training_plot.png)
 ![Validation Plot](plots/val_plot.png)
 
@@ -19,6 +23,10 @@ During the training process, we saved model checkpoints at epoch 15 and at the e
 - The Average Precision for the 'Animals' class is: 0.94
 - The mAP is 0.946
 
+
+## Image plots that contain the top 20 boxes produced by the Box Head before NMS
+![Pre NMS Results](plots/pre_nms_results.png)
+
 ## Image plots of the regressed boxes after the postprocessing
-![postprocessing_results](plots/postprocessing_results.png)
-![postprocessing_results](plots/postprocessing_results_2.png)
+![Postprocessing Results](plots/postprocessing_results.png)
+![Postprocessing Results](plots/postprocessing_results_2.png)
