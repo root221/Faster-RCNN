@@ -18,7 +18,7 @@ class BoxHead(pl.LightningModule):
         self.C=Classes
         self.P=P
         self.backbone, self.rpn = pretrained_models_680(pretrained_path)
-        self.strides = [4, 8, 16, 32]        
+        self.spatial_scale = [0.25, 0.125, 0.0625, 0.03125]      
         # TODO initialize BoxHead
 
         self.intermediate_layer = nn.Sequential(
@@ -97,14 +97,14 @@ class BoxHead(pl.LightningModule):
         # Here you can use torchvision.ops.RoIAlign check the docs
         #####################################
         feature_vectors = []
-        batch_size = len(proposals) 
+        batch_size = len(proposals)
         for i in range(batch_size):
             width = (proposals[i][:, 2] -  proposals[i][:, 0])
             height = (proposals[i][:, 3] -  proposals[i][:, 1]) 
             k = torch.floor(4 + torch.log2((width*height).sqrt()/224))
             k = torch.clamp(k, 2, 5)
             for j in range(2, 6):
-                feature_vectors.append(roi_align(fpn_feat_list[j-2][i:i+1], [proposals[i][k==j]], P, spatial_scale=self.strides[j-2]))
+                feature_vectors.append(roi_align(fpn_feat_list[j-2][i:i+1], [proposals[i][k==j]], P, spatial_scale=self.spatial_scale[j-2]))        
         feature_vectors = torch.vstack(feature_vectors)
         feature_vectors = feature_vectors.reshape(feature_vectors.shape[0], -1)
         return feature_vectors
@@ -155,7 +155,6 @@ class BoxHead(pl.LightningModule):
         pos_box_preds = torch.gather(box_preds[pos_indices], 1, indices) 
         loss_regr = torch.nn.SmoothL1Loss(reduction="sum")(regression_targets[pos_indices], pos_box_preds)
         num_pos = len(pos_indices)
-        loss_regr = loss_regr / 4
         loss = loss_class + loss_regr
         return loss, loss_class, loss_regr
 
@@ -207,7 +206,7 @@ class BoxHead(pl.LightningModule):
             rpnout = self.rpn(im_lis, backout)
 
     
-        keep_topK = 150
+        keep_topK = 200
         # A list of proposal tensors: list:len(bz){(keep_topK,4)}
         proposals=[proposal[0:keep_topK,:] for proposal in rpnout[0]]
         # A list of features produces by the backbone's FPN levels: list:len(FPN){(bz,256,H_feat,W_feat)}
@@ -234,7 +233,7 @@ class BoxHead(pl.LightningModule):
         rpnout = self.rpn(im_lis, backout)
 
     
-        keep_topK = 150
+        keep_topK = 200
         # A list of proposal tensors: list:len(bz){(keep_topK,4)}
         proposals=[proposal[0:keep_topK,:] for proposal in rpnout[0]]
         # A list of features produces by the backbone's FPN levels: list:len(FPN){(bz,256,H_feat,W_feat)}
@@ -253,8 +252,8 @@ class BoxHead(pl.LightningModule):
         
         return loss
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=1e-3)
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.99)
+        optimizer = optim.Adam(self.parameters(), lr=1e-4)
+        scheduler = StepLR(optimizer, step_size=10, gamma=0.9)
         return {"optimizer": optimizer, "lr_scheduler": scheduler} 
      
 if __name__ == '__main__':
