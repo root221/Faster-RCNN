@@ -41,3 +41,36 @@ During the training process, we saved model checkpoints at epoch 15 and at the e
 ## Image plots of the regressed boxes after the postprocessing
 ![Postprocessing Results](plots/postprocessing_results.png)
 ![Postprocessing Results](plots/postprocessing_results_2.png)
+
+
+
+## Analyzing mAP for a Single Batch of Data
+This section provides an analysis of the mean Average Precision (mAP) for a single batch of data. The plot below illustrates the ground truth boxes in blue and the predicted boxes in red for the batch of images, offering insights into the model's performance on this specific subset of data.
+![mAP](plots/mAP.png)
+
+The mAP of this batch of data is 0.852. Below, we present the precision-recall (PR) curves for each class, along with a detailed precision-recall table for the Vehicle Class
+
+### Precision-Recall Table for Vehicle Class
+| Image   | Confidence | TP or FP | Precision | Recall |
+|---------|------------|----------|-----------|--------|
+| Image 6 | 0.99989796 | TP       | 1/1       | 1/3    |
+| Image 3 | 0.99973518 | TP       | 2/2       | 2/3    |
+| Image 3 | 0.99083507 | TP       | 3/3       | 3/3    |
+| Image 3 | 0.99032766 | FP       | 3/4       | 3/3    |
+| Image 4 | 0.98912036 | FP       | 3/5       | 3/3    |
+
+![mAP](plots/pr_curve_vehicle.png)
+
+![mAP](plots/pr_curve_people.png)
+
+![mAP](plots/pr_curve_animal.png)
+
+Note: The 'wiggles' in the precision-recall curve have been smoothed using interpolated precision, represented by the orange line, for the calculation of mAP, as illustrated in the figure below:
+![Precision-Recall Curve](plots/pr_curve.png)
+
+## Implementation Specifics
+
+- The threshold for NMS is set to 0.4, instead of the commonly used 0.5
+- The optimizer is Adam optimizer with a learning rate of 0.0001
+- A step learning rate scheduler reduces the learning rate by 10% every 10 epochs
+- The effective batch size for training is set to 100, indicating the number of samples per mini-batch
