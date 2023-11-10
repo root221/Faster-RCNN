@@ -1,8 +1,8 @@
 ## Image plots of the proposals with the no-background classes and their ground truth boxes
-
+### The thick solid boxes represent the ground truth, while the thin dashed boxes are the proposals
 ![Proposals](plots/proposals.png)
 ![Proposals](plots/proposals_2.png)
-*The thick solid boxes represent the ground truth, while the thin dashed boxes are the proposals*
+
 
 
 ## Training and Validation curves of the total loss, the loss of the classifier, and the loss of the regressor of the Box Head
