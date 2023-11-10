@@ -1,3 +1,12 @@
+## Running the Code
+
+To train the model, simply execute the training script:
+
+```bash
+python BoxHead.py
+```
+For evaluation, refer to the provided Jupyter Notebook `rcnn.ipynb`.
+
 ## Image plots of the proposals with the no-background classes and their ground truth boxes
 ### The thick solid boxes represent the ground truth, while the thin dashed boxes are the proposals
 ![Proposals](plots/proposals.png)
