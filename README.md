@@ -1,3 +1,7 @@
+## Downloading the Data
+
+Before running the code, download the data from the [Google Drive link](https://drive.google.com/drive/folders/1eP7FtPaWfJ5zLdcsZYl6eyn5EYixkFn8) and place it in the `data` directory, which should be located at the root of the project directory
+
 ## Running the Code
 
 To train the model, simply execute the training script:
