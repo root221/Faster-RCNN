@@ -1,7 +1,7 @@
 import torchvision
 import torch
 from dataset import *
-
+from faster_rcnn_datamodule import DataModule
 
 def pretrained_models_680(checkpoint_file,eval=True):
     import torchvision
@@ -25,7 +25,6 @@ def pretrained_models_680(checkpoint_file,eval=True):
 
     backbone.load_state_dict(checkpoint['backbone'])
     rpn.load_state_dict(checkpoint['rpn'])
-
     return backbone, rpn
 
 if __name__ == '__main__':
@@ -45,6 +44,15 @@ if __name__ == '__main__':
     bboxes_path = "./data/hw3_mycocodata_bboxes_comp_zlib.npy"
 
     paths = [imgs_path, masks_path, labels_path, bboxes_path]
+    
+    datamodule = DataModule(paths)   
+
+    datamodule.setup(stage="test")
+    test_loader = datamodule.test_dataloader()
+    data_iter = iter(test_loader)
+    batch = next(data_iter)
+    
+    ''' 
     # load the data into data.Dataset
     dataset = BuildDataset(paths)
 
@@ -60,21 +68,27 @@ if __name__ == '__main__':
     print("batch size:", batch_size)
     test_build_loader = BuildDataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     test_loader = test_build_loader.loader()
-
+    '''
 
     # Here we keep the top 20, but during training you should keep around 200 boxes from the 1000 proposals
     keep_topK=20
 
     with torch.no_grad():
         for iter, batch in enumerate(test_loader, 0):
-            images = batch['images'].to(device)
-
+            #images = batch['images'].to(device)
+            images, labels, masks, bboxes, indices = batch
+            images = images.to(device) 
+        
+            batch_size = len(images)    
+        
             # Take the features from the backbone
             backout = backbone(images)
 
             # The RPN implementation takes as first argument the following image list
             im_lis = ImageList(images, [(800, 1088)]*images.shape[0])
             # Then we pass the image list and the backbone output through the rpn
+            import pdb
+            pdb.set_trace()
             rpnout = rpn(im_lis, backout)
 
             #The final output is
@@ -90,6 +104,8 @@ if __name__ == '__main__':
             for feat in fpn_feat_list:
                 print(feat.shape)
 
+            import pdb
+            pdb.set_trace()
 
             # Visualization of the proposals
             for i in range(batch_size):

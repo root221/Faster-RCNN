@@ -41,12 +41,11 @@ class BuildDataset(torch.utils.data.Dataset):
         raw_bbox = self.bboxes[index]
         label = self.labels[index]
         # Preprocess the raw data
-        transed_img, transed_mask, transed_bbox = self.pre_process_batch(raw_img, raw_mask, raw_bbox)
+        transed_img, transed_bbox = self.pre_process_batch(raw_img, raw_mask, raw_bbox)
         label = torch.tensor(label)
         # check flag
         assert transed_img.shape == (3, 800, 1088)
-        assert transed_bbox.shape[0] == transed_mask.shape[0]
-        return transed_img, label, transed_mask, transed_bbox, index
+        return transed_img, label, transed_bbox, index
         
         
     def __len__(self):
@@ -65,11 +64,6 @@ class BuildDataset(torch.utils.data.Dataset):
         img = torch.tensor(img, dtype=torch.float32)
         img = self.transform(img)
 
-        mask = mask.astype(np.float32)
-        mask = torch.tensor(mask)
-        mask = transforms.Resize((800, 1066), interpolation=transforms.InterpolationMode.NEAREST)(mask)
-        mask = transforms.Pad((11, 0))(mask)    
-       
         scale = 1066 / original_width 
         bbox = torch.tensor(bbox)
         bbox *= scale
@@ -77,11 +71,10 @@ class BuildDataset(torch.utils.data.Dataset):
     
         # check flag
         assert img.shape == (3, 800, 1088)
-        assert bbox.shape[0] == mask.shape[0]
-        return img, mask, bbox
+        return img, bbox
 
 def collate_fn(batch):
-    images, labels, masks, bounding_boxes, indices = list(zip(*batch))
-    return torch.stack(images), labels, masks, bounding_boxes, indices 
+    images, labels, bounding_boxes, indices = list(zip(*batch))
+    return torch.stack(images), labels,  bounding_boxes, indices 
     
 
