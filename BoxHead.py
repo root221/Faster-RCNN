@@ -257,10 +257,10 @@ class BoxHead(pl.LightningModule):
         return {"optimizer": optimizer, "lr_scheduler": scheduler} 
      
 if __name__ == '__main__':
-    imgs_path = '../partA/data/hw3_mycocodata_img_comp_zlib.h5'
-    masks_path = '../partA/data/hw3_mycocodata_mask_comp_zlib.h5'
-    labels_path = '../partA/data/hw3_mycocodata_labels_comp_zlib.npy'
-    bboxes_path = '../partA/data/hw3_mycocodata_bboxes_comp_zlib.npy'
+    imgs_path = 'data/hw3_mycocodata_img_comp_zlib.h5'
+    masks_path = 'data/hw3_mycocodata_mask_comp_zlib.h5'
+    labels_path = 'data/hw3_mycocodata_labels_comp_zlib.npy'
+    bboxes_path = 'data/hw3_mycocodata_bboxes_comp_zlib.npy'
     paths = [imgs_path, masks_path, labels_path, bboxes_path]
     datamodule = DataModule(paths) 
     box_head= BoxHead() 
