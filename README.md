@@ -32,9 +32,8 @@ During the training process, we saved model checkpoints at epoch 15 and at the e
 **Epoch 30:**
 - The Average Precision for the 'Vehicles' class is: 0.931
 - The Average Precision for the 'People' class is: 0.969
-- The Average Precision for the 'Animals' class is: 0.94
-- The mAP is 0.946
-
+- The Average Precision for the 'Animals' class is: 0.936
+- The mAP is 0.945
 
 ## Image plots that contain the top 20 boxes produced by the Box Head before NMS
 ![Pre NMS Results](plots/pre_nms_results.png)
